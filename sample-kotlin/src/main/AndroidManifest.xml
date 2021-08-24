@@ -10,6 +10,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity
+            android:name="com.rudderstack.android.sample.kotlin.MainActivity2"
+            android:exported="true" />
         <activity android:name="com.rudderstack.android.sample.kotlin.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -17,6 +20,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <!-- Inserted Qualtrics Lines -->
+        <activity android:name="com.qualtrics.digital.QualtricsSurveyActivity" />
+        <activity
+            android:name="com.qualtrics.digital.QualtricsPopOverActivity"
+            android:theme="@style/Qualtrics.Theme.Transparent" />
+
     </application>
 
 </manifest>
