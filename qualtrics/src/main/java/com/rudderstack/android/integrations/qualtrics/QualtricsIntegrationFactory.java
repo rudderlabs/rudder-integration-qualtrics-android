@@ -1,36 +1,64 @@
 package com.rudderstack.android.integrations.qualtrics;
 
+import android.text.TextUtils;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.google.gson.Gson;
+import com.qualtrics.digital.Qualtrics;
+import com.qualtrics.digital.QualtricsLogLevel;
 import com.rudderstack.android.sdk.core.MessageType;
 import com.rudderstack.android.sdk.core.RudderClient;
 import com.rudderstack.android.sdk.core.RudderConfig;
+import com.rudderstack.android.sdk.core.RudderContext;
 import com.rudderstack.android.sdk.core.RudderIntegration;
 import com.rudderstack.android.sdk.core.RudderLogger;
 import com.rudderstack.android.sdk.core.RudderMessage;
 
+import java.util.Map;
 
-public class QualtricsIntegrationFactory extends RudderIntegration<RudderClient> {
-    private static final String KOCHAVA_KEY = "Kochava";
-    
+
+public class QualtricsIntegrationFactory extends RudderIntegration<Qualtrics> {
+    private static final String QUALTRICS_KEY = "Qualtrics";
+    private Qualtrics qualtrics = Qualtrics.instance();
+
     public static Factory FACTORY = new Factory() {
         @Override
         public RudderIntegration<?> create(Object settings, RudderClient client, RudderConfig rudderConfig) {
-            return new QualtricsIntegrationFactory(settings);
+            return new QualtricsIntegrationFactory(settings, rudderConfig);
         }
 
         @Override
         public String key() {
-            return KOCHAVA_KEY;
+            return QUALTRICS_KEY;
         }
     };
 
-    private QualtricsIntegrationFactory(@NonNull Object config) {
+    private QualtricsIntegrationFactory(@NonNull Object config, RudderConfig rudderConfig) {
         if (RudderClient.getApplication() == null) {
-            RudderLogger.logError("Application is null. Aborting Kochava initialization.");
+            RudderLogger.logError("Application is null. Aborting Qualtrics initialization.");
             return;
         }
+
+        Gson gson = new Gson();
+        QualtricsDestinationConfig destinationConfig = gson.fromJson(
+                gson.toJson(config),
+                QualtricsDestinationConfig.class
+        );
+
+        if (TextUtils.isEmpty(destinationConfig.brandId) || TextUtils.isEmpty(destinationConfig.projectId)) {
+            RudderLogger.logError("Invalid Qualtrics Account Credentials, Aborting");
+            return;
+        }
+
+        //Debugger of Qualtrics
+        if (rudderConfig.getLogLevel() >= RudderLogger.RudderLogLevel.INFO) {
+            qualtrics.setLogLevel(QualtricsLogLevel.INFO);
+        }
+
+        qualtrics.initializeProject(destinationConfig.brandId, destinationConfig.projectId, RudderClient.getApplication());
+        RudderLogger.logInfo("Initialized Qualtrics SDK");
     }
 
     private void processRudderEvent(RudderMessage element) {
@@ -38,14 +66,11 @@ public class QualtricsIntegrationFactory extends RudderIntegration<RudderClient>
         if (type != null) {
             switch (type) {
                 case MessageType.IDENTIFY:
-                    break;
-                case MessageType.TRACK:
-                    break;
-                case MessageType.SCREEN:
-                    break;
-                case MessageType.GROUP:
-                    break;
-                case MessageType.ALIAS:
+                    RudderContext rudderContext = element.getContext();
+                    Map<String, Object> traits = rudderContext.getTraits();
+                    for (String property : traits.keySet()) {
+                        Qualtrics.instance().properties.setString(property, (String) traits.get(property));
+                    }
                     break;
                 default:
                     RudderLogger.logWarn("MessageType is not specified or supported");
@@ -56,7 +81,6 @@ public class QualtricsIntegrationFactory extends RudderIntegration<RudderClient>
 
     @Override
     public void reset() {
-        
     }
 
     @Override
@@ -71,7 +95,7 @@ public class QualtricsIntegrationFactory extends RudderIntegration<RudderClient>
     }
 
     @Override
-    public RudderClient getUnderlyingInstance() {
-        return null;
+    public Qualtrics getUnderlyingInstance() {
+        return Qualtrics.instance();
     }
 }
