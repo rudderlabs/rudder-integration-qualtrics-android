@@ -6,7 +6,7 @@ More information on RudderStack can be found [here](https://github.com/rudderlab
 
 ## Integrating Qualtrics for RudderStack's Android SDK
 
-1. Add [Qualtrics](https://www.qualtrics.com/) as a destination in the [RudderStack dashboard](https://app.rudderstack.com/) and define the app secret key.
+1. Add [Qualtrics](https://www.qualtrics.com/) as a destination in the [RudderStack dashboard](https://app.rudderstack.com/) and define the Project ID and Brand ID.
 
 2. Add the following `dependencies` to your `app/build.gradle` file as shown:
 

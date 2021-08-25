@@ -96,6 +96,6 @@ public class QualtricsIntegrationFactory extends RudderIntegration<Qualtrics> {
 
     @Override
     public Qualtrics getUnderlyingInstance() {
-        return Qualtrics.instance();
+        return qualtrics;
     }
 }
