@@ -81,6 +81,7 @@ public class QualtricsIntegrationFactory extends RudderIntegration<Qualtrics> {
 
     @Override
     public void reset() {
+        RudderLogger.logDebug("Qualtrics Factory doesn't support Reset Call");
     }
 
     @Override
