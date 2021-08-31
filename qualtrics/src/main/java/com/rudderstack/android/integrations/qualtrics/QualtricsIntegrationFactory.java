@@ -68,6 +68,7 @@ public class QualtricsIntegrationFactory extends RudderIntegration<Qualtrics> {
                 case MessageType.IDENTIFY:
                     RudderContext rudderContext = element.getContext();
                     Map<String, Object> traits = rudderContext.getTraits();
+
                     for (String property : traits.keySet()) {
                         if(traits.get(property) instanceof String) {
                             Qualtrics.instance().properties.setString(property, (String) traits.get(property));
@@ -75,11 +76,12 @@ public class QualtricsIntegrationFactory extends RudderIntegration<Qualtrics> {
                         else if(traits.get(property) instanceof Number) {
                             Qualtrics.instance().properties.setNumber(
                                     property,
-                                    getDouble(traits.get(property), 0)
+                                    getDouble(traits.get(property))
                             );
                         }
                         else {
-                            RudderLogger.logDebug("Value is not of type String or Number");
+                            RudderLogger.logDebug(property + " whose value is: " + traits.get(property) +
+                                    " is not supported, as it is not of type String or Number.");
                         }
                     }
                     break;
@@ -106,14 +108,13 @@ public class QualtricsIntegrationFactory extends RudderIntegration<Qualtrics> {
         }
     }
 
-    private double getDouble(Object value, double defaultValue) {
+    private double getDouble(Object value) {
         if (value instanceof Double) {
             return (double) value;
         }
-        if (value instanceof Number) {
+        else {
             return ((Number) value).doubleValue();
         }
-        return defaultValue;
     }
 
     @Override
