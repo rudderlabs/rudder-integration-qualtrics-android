@@ -69,7 +69,18 @@ public class QualtricsIntegrationFactory extends RudderIntegration<Qualtrics> {
                     RudderContext rudderContext = element.getContext();
                     Map<String, Object> traits = rudderContext.getTraits();
                     for (String property : traits.keySet()) {
-                        Qualtrics.instance().properties.setString(property, (String) traits.get(property));
+                        if(traits.get(property) instanceof String) {
+                            Qualtrics.instance().properties.setString(property, (String) traits.get(property));
+                        }
+                        else if(traits.get(property) instanceof Number) {
+                            Qualtrics.instance().properties.setNumber(
+                                    property,
+                                    getDouble(traits.get(property), 0)
+                            );
+                        }
+                        else {
+                            RudderLogger.logDebug("Value is not of type String or Number");
+                        }
                     }
                     break;
                 default:
@@ -93,6 +104,16 @@ public class QualtricsIntegrationFactory extends RudderIntegration<Qualtrics> {
         } catch (Exception e) {
             RudderLogger.logError(e);
         }
+    }
+
+    private double getDouble(Object value, double defaultValue) {
+        if (value instanceof Double) {
+            return (double) value;
+        }
+        if (value instanceof Number) {
+            return ((Number) value).doubleValue();
+        }
+        return defaultValue;
     }
 
     @Override
