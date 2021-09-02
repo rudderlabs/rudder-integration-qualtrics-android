@@ -16,7 +16,7 @@ apply plugin: 'kotlin-android-extensions'
 android {
     compileSdkVersion 30
     defaultConfig {
-        applicationId "com.rudderstack.sample.kochava.android"
+        applicationId "com.rudderstack.sample.qualtrics.android"
         minSdkVersion 21
         targetSdkVersion 30
         versionCode 1
