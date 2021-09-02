@@ -15,7 +15,7 @@ signing {
 }
 
 group = 'com.rudderstack.android.integration'
-archivesBaseName = 'kochava'
+archivesBaseName = 'qualtrics'
 version = '1.0.0'
 
 File secretPropsFile = project.rootProject.file('local.properties')
@@ -43,22 +43,22 @@ uploadArchives {
             }
 
             pom.project {
-                name 'Rudder-Integration-Kochava-Android'
-                artifactId 'kochava'
+                name 'Rudder-Integration-Qualtrics-Android'
+                artifactId 'qualtrics'
                 packaging 'aar'
-                description 'RudderStack\'s Native SDK Integration support for Kochava.'
-                url 'https://github.com/rudderlabs/rudder-integration-kochava-android'
+                description 'RudderStack\'s Native SDK Integration support for qualtrics.'
+                url 'https://github.com/rudderlabs/rudder-integration-qualtrics-android'
 
                 scm {
-                    connection 'scm:git:git://github.com/rudderlabs/rudder-integration-kochava-android'
-                    developerConnection 'scm:git:ssh://github.com:rudderlabs/rudder-integration-kochava-android'
-                    url 'https://github.com/rudderlabs/rudder-integration-kochava-android/tree/master'
+                    connection 'scm:git:git://github.com/rudderlabs/rudder-integration-qualtrics-android'
+                    developerConnection 'scm:git:ssh://github.com:rudderlabs/rudder-integration-qualtrics-android'
+                    url 'https://github.com/rudderlabs/rudder-integration-qualtrics-android/tree/master'
                 }
 
                 licenses {
                     license {
                         name 'MIT License'
-                        url 'https://github.com/rudderlabs/rudder-integration-kochava-android/blob/master/LICENSE'
+                        url 'https://github.com/rudderlabs/rudder-integration-qualtrics-android/blob/master/LICENSE'
                     }
                 }
 
