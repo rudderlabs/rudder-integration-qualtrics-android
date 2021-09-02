@@ -4,18 +4,43 @@
 
 More information on RudderStack can be found [here](https://github.com/rudderlabs/rudder-server).
 
-## Integrating Kochava for RudderStack's Android SDK
+## Integrating Qualtrics for RudderStack's Android SDK
 
-1. Add [Kochava](https://www.kochava.com/) as a destination in the [RudderStack dashboard](https://app.rudderstack.com/) and define the app secret key.
+1. Add [Qualtrics](https://www.qualtrics.com/) as a destination in the [RudderStack dashboard](https://app.rudderstack.com/) and define the Project ID and Brand ID.
 
 2. Add the following `dependencies` to your `app/build.gradle` file as shown:
 
 ```groovy
 implementation 'com.rudderstack.android.sdk:core:1.+'
-implementation 'com.rudderstack.android.integration:kochava:1.0.0'
+implementation 'com.rudderstack.android.integration:qualtrics:1.0.0'
 implementation 'com.google.code.gson:gson:2.8.6'
 
-// Kochava dependencies here
+// Qualtrics dependency
+implementation 'com.qualtrics:digital:2.0.0'
+```
+
+3. Add a new maven repository for the App Feedback package.
+
+```groovy
+allprojects {
+    repositories {
+        google()
+        jcenter()
+        maven {
+            url "https://s3-us-west-2.amazonaws.com/si-mobile-sdks/android/"
+        }
+    }
+}
+```
+
+4. Open the AndroidManifest.xml file from the src/main folder in the project root and add the following XML snippet after the existing activity:
+
+```xml
+<activity android:name=
+    "com.qualtrics.digital.QualtricsSurveyActivity"/>
+<activity android:name=
+    "com.qualtrics.digital.QualtricsPopOverActivity" 
+          android:theme="@style/Qualtrics.Theme.Transparent"/>
 ```
 
 5. Finally change the initialization of your `RudderClient` in your `Application` class:
@@ -26,7 +51,7 @@ val rudderClient = RudderClient.getInstance(
     <YOUR_WRITE_KEY>,
     RudderConfig.Builder()
         .withDataPlaneUrl(<YOUR_DATA_PLANE_URL>)
-        .withFactory(KochavaIntegrationFactory.FACTORY)
+        .withFactory(QualtricsIntegrationFactory.FACTORY)
         .build()
 )
 ```
